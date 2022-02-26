@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/serialt/cli/config"
+	"github.com/serialt/sync/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"

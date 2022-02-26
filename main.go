@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/serialt/cli/cmd"
-	"github.com/serialt/cli/config"
+	"github.com/serialt/sync/cmd"
+	"github.com/serialt/sync/config"
 )
 
 var (

@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
-func Download(url string, path string) (err error) {
-	download_url := url
+func Download(src_url, dst_path string) (err error) {
+	download_url := src_url
 
-	request, err := http.NewRequest("GET", download_url, nil)
+	request, err := http.NewRequest("GET", url.PathEscape(download_url), nil)
 	if err != nil {
 		return
 	}
@@ -33,8 +34,8 @@ func Download(url string, path string) (err error) {
 	defer resp.Body.Close()
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		return
 	}
-	ioutil.WriteFile("img1.jpg", data, 0644)
+	ioutil.WriteFile(dst_path, data, 0644)
 	return
 }
