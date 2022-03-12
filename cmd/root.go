@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	flag "github.com/spf13/pflag"
 
@@ -68,52 +69,6 @@ type REPO struct {
 
 var MyRepo []REPO
 var BreakWall []string
-var 
-var MonitorRepo []string = []string{
-	"XTLS/Xray-core",
-	"v2rayA/v2rayA",
-	"v2fly/v2ray-core",
-	"prometheus/prometheus",
-	"prometheus/mysqld_exporter",
-	"prometheus/alertmanager",
-	"prometheus/haproxy_exporter",
-	"prometheus/node_exporter",
-	"prometheus/blackbox_exporter",
-	"prometheus/jmx_exporter",
-	"prometheus/consul_exporter",
-	"prometheus/snmp_exporter",
-	"prometheus/memcached_exporter",
-	"prometheus/pushgateway",
-	"prometheus/statsd_exporter",
-	"prometheus/influxdb_exporter",
-	"prometheus/collectd_exporter",
-	"ClickHouse/clickhouse_exporter",
-	"danielqsj/kafka_exporter",
-	"oliver006/redis_exporter",
-	"prometheus-community/elasticsearch_exporter",
-	"prometheus-community/windows_exporter",
-	"prometheus-community/postgres_exporter",
-	"prometheus-community/elasticsearch_exporter",
-	"prometheus-community/pgbouncer_exporter",
-	"prometheus-community/bind_exporter",
-	"prometheus-community/smartctl_exporter",
-	"percona/mongodb_exporter",
-	"iamseth/oracledb_exporter",
-	"ncabatoff/process-exporter",
-	"nginxinc/nginx-prometheus-exporter",
-	"cloudflare/ebpf_exporter",
-	"martin-helmich/prometheus-nginxlog-exporter",
-	"hnlq715/nginx-vts-exporter",
-	"vvanholl/elasticsearch-prometheus-exporter",
-	"free/sql_exporter",
-	"hipages/php-fpm_exporter",
-	"digitalocean/ceph_exporter",
-	"pryorda/vmware_exporter",
-	"Lusitaniae/apache_exporter",
-	"joe-elliott/cert-exporter",
-	"fatedier/frp",
-	
-}
 
 func Run() {
 
@@ -135,17 +90,29 @@ func Run() {
 	// pkg.Sugar.Info(config.LogFile)
 	// service.GetLastestRelease("fatedier", "frp")
 	// service.DownloadReleaseAsset("fatedier", "frp", 56250083)
-	MyRepo = []REPO{
-		REPO{
-			Owner: "fatedier",
-			Repo:  "repo",
-		},
-		REPO{
-			Owner: "XTLS",
-		},
-	}
 
-	down := service.NewGitHubRelease("fatedier", "frp", "/tmp")
+	// monitor
+	for _, v := range config.Config.GithubRelease {
+		myMonitorRepo := strings.Split(v, "/")
+		MonitorDownload(myMonitorRepo[0], myMonitorRepo[1])
+
+	}
+	for _, v := range config.Config.Monitor {
+
+		myMonitorRepo := strings.Split(v, "/")
+		OtherDownload(myMonitorRepo[0], myMonitorRepo[1])
+	}
+	// down := service.NewGitHubRelease(myM, "frp", "/tmp")
+	// down.Download()
+
+}
+func MonitorDownload(owner, repo string) {
+	down := service.NewGitHubRelease(owner, repo, "/tmp/mirror/monitor")
+	down.Download()
+}
+
+func OtherDownload(owner, repo string) {
+	down := service.NewGitHubRelease(owner, repo, "/tmp/mirror")
 	down.Download()
 
 }

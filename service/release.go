@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/v42/github"
+	"github.com/serialt/sync/config"
 	"github.com/serialt/sync/pkg"
 )
 
@@ -120,7 +121,7 @@ func NewGitHubRelease(owner, repo, path string) *GithubRelease {
 
 // 判断字符串A中是否含有字符串B
 func ExcludeTxt(txt string) bool {
-	excludeTxt := []string{"386", "mips", "bsd", "dragonfly", "32", "ppc", "riscv", "s3960", "illumos", "v5", "v6", "v7", "Source"}
+	excludeTxt := config.Config.ExcludeTxt
 	for _, v := range excludeTxt {
 		if strings.Contains(txt, v) {
 			return true

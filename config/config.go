@@ -42,14 +42,17 @@ type Service struct {
 }
 
 type MyConfig struct {
-	Service Service `json:"service" yaml:"service"`
+	// Service       Service  `json:"service" yaml:"service"`
+	Monitor       []string `yaml:"monitor"`
+	GithubRelease []string `yaml:"githubRelease:"`
+	ExcludeTxt    []string `yaml:"excludeTxt"`
 }
 
 var Config *MyConfig
 
 func LoadConfig(filepath string) {
 	if filepath == "" {
-		return
+		filepath = "~/.sync.yaml"
 	}
 	config, err := ioutil.ReadFile(filepath)
 	if err != nil {
