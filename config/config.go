@@ -33,7 +33,8 @@ var (
 	GOVERSION  = runtime.Version()
 	GOOSARCH   = runtime.GOOS + "/" + runtime.GOARCH
 	// 其他配置文件
-	ConfigPath = ""
+	ConfigPath = "/root/.sync.yaml"
+	MirrorRoot = "/tmp/mirror"
 )
 
 type Service struct {
@@ -43,17 +44,15 @@ type Service struct {
 
 type MyConfig struct {
 	// Service       Service  `json:"service" yaml:"service"`
+	GithubToken   string   `yaml:"githubToken"`
 	Monitor       []string `yaml:"monitor"`
-	GithubRelease []string `yaml:"githubRelease:"`
+	GithubRelease []string `yaml:"githubRelease"`
 	ExcludeTxt    []string `yaml:"excludeTxt"`
 }
 
 var Config *MyConfig
 
 func LoadConfig(filepath string) {
-	if filepath == "" {
-		filepath = "~/.sync.yaml"
-	}
 	config, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		fmt.Printf("read config failed, please check the path: %v , err: %v", filepath, err)

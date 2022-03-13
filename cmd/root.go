@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	flag "github.com/spf13/pflag"
 
@@ -46,6 +47,7 @@ func init() {
 	flag.IntVar(&config.LogMaxAge, "logMaxAge", config.LogMaxAge, "Time for the log file, Day")
 	flag.BoolVar(&config.LogCompress, "logCompress", config.LogCompress, "Compress rotated file")
 	flag.StringVarP(&config.ConfigPath, "cfgFile", "c", env("CONFIG", config.ConfigPath), "[EXPERIMENTAL] Path to config yaml file that can enable TLS or authentication.")
+	flag.StringVarP(&config.MirrorRoot, "mirrorRoot", "c", env("MirrorRoot", config.MirrorRoot), "[EXPERIMENTAL] github release 下载存储的路径.")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
 		fmt.Println("使用说明")
@@ -69,9 +71,11 @@ type REPO struct {
 
 var MyRepo []REPO
 var BreakWall []string
+var Githubclient *service.GithubClient
 
 func Run() {
-
+	pkg.Sugar.Info("token: ", config.Config.GithubToken)
+	Githubclient = &service.GithubClient{Token: config.Config.GithubToken}
 	if appVersion {
 		fmt.Printf("APPName: %v\n Maintainer: %v\n Version: %v\n BuildTime: %v\n GitCommit: %v\n GoVersion: %v\n OS/Arch: %v\n",
 			config.APPName,
@@ -91,28 +95,31 @@ func Run() {
 	// service.GetLastestRelease("fatedier", "frp")
 	// service.DownloadReleaseAsset("fatedier", "frp", 56250083)
 
+	// 减少段时间内请求github的次数
+
 	// monitor
 	for _, v := range config.Config.GithubRelease {
+		time.Sleep(time.Second * 3)
 		myMonitorRepo := strings.Split(v, "/")
-		MonitorDownload(myMonitorRepo[0], myMonitorRepo[1])
+		OtherDownload(myMonitorRepo[0], myMonitorRepo[1])
 
 	}
 	for _, v := range config.Config.Monitor {
-
+		time.Sleep(time.Second * 3)
 		myMonitorRepo := strings.Split(v, "/")
-		OtherDownload(myMonitorRepo[0], myMonitorRepo[1])
+		MonitorDownload(myMonitorRepo[0], myMonitorRepo[1])
 	}
 	// down := service.NewGitHubRelease(myM, "frp", "/tmp")
 	// down.Download()
 
 }
 func MonitorDownload(owner, repo string) {
-	down := service.NewGitHubRelease(owner, repo, "/tmp/mirror/monitor")
-	down.Download()
+	down := Githubclient.NewGitHubRelease(owner, repo, config.MirrorRoot+"/monitor")
+	down.Download(Githubclient)
 }
 
 func OtherDownload(owner, repo string) {
-	down := service.NewGitHubRelease(owner, repo, "/tmp/mirror")
-	down.Download()
+	down := Githubclient.NewGitHubRelease(owner, repo, config.MirrorRoot)
+	down.Download(Githubclient)
 
 }

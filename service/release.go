@@ -11,6 +11,7 @@ import (
 	"github.com/google/go-github/v42/github"
 	"github.com/serialt/sync/config"
 	"github.com/serialt/sync/pkg"
+	"golang.org/x/oauth2"
 )
 
 type GithubRelease struct {
@@ -23,11 +24,15 @@ type GithubRelease struct {
 	Path               string
 }
 
-func GetLastestReleaseAsset() {
+func (c *GithubClient) GetLastestReleaseAsset() {
 	// fatedier / frp
 	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: c.Token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
 
-	client := github.NewClient(nil)
+	client := github.NewClient(tc)
 
 	reader, _, err := client.Repositories.DownloadReleaseAsset(ctx, "fatedier", "frp", 1, http.DefaultClient)
 
@@ -45,9 +50,14 @@ func GetLastestReleaseAsset() {
 // }
 
 // 获取最新的稳定release
-func GetLastestRelease(owner, repo string) (release *github.RepositoryRelease) {
+func (c *GithubClient) GetLastestRelease(owner, repo string) (release *github.RepositoryRelease) {
 	ctx := context.Background()
-	client := github.NewClient(nil)
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: c.Token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+
+	client := github.NewClient(tc)
 	release, _, err := client.Repositories.GetLatestRelease(ctx, owner, repo)
 	if err != nil {
 		pkg.Sugar.Infof("cat not get the lastest release, owner: %v,repo: %v, err: %v", owner, repo, err)
@@ -57,9 +67,14 @@ func GetLastestRelease(owner, repo string) (release *github.RepositoryRelease) {
 }
 
 // 获取最近 lastNum 个数的release,可能包括beta和pre-release
-func ListRelease(owner, repo string, lastNum int) (releaseList []*github.RepositoryRelease) {
+func (c *GithubClient) ListRelease(owner, repo string, lastNum int) (releaseList []*github.RepositoryRelease) {
 	ctx := context.Background()
-	client := github.NewClient(nil)
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: c.Token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+
+	client := github.NewClient(tc)
 	opt := &github.ListOptions{Page: 1, PerPage: lastNum}
 	release, _, err := client.Repositories.ListReleases(ctx, owner, repo, opt)
 	if err != nil {
@@ -70,13 +85,18 @@ func ListRelease(owner, repo string, lastNum int) (releaseList []*github.Reposit
 }
 
 // 根据assetID 下载release到指定的目录
-func DownloadReleaseAsset(owner, repo string, assetID int, filepath string) {
+func (c *GithubClient) DownloadReleaseAsset(owner, repo string, assetID int, filepath string) {
 	// 如果目录里文件存在则不操作
 	if IsDirExists(filepath) {
 		return
 	}
 	ctx := context.Background()
-	client := github.NewClient(nil)
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: c.Token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+
+	client := github.NewClient(tc)
 	reader, _, err := client.Repositories.DownloadReleaseAsset(ctx, owner, repo, int64(assetID), http.DefaultClient)
 	if err != nil {
 		pkg.Sugar.Infof("Download release asset failed, owner: %v,repo: %v,asset_id: %v,err: %v", owner, repo, int64(assetID), err)
@@ -90,13 +110,13 @@ func DownloadReleaseAsset(owner, repo string, assetID int, filepath string) {
 }
 
 // 获取单个版本的release信息
-func NewGitHubRelease(owner, repo, path string) *GithubRelease {
+func (c *GithubClient) NewGitHubRelease(owner, repo, path string) *GithubRelease {
 	GR := &GithubRelease{
 		Owner: owner,
 		Repo:  repo,
 	}
 
-	myRelease := GetLastestRelease(owner, repo)
+	myRelease := c.GetLastestRelease(owner, repo)
 	GR.Version = *myRelease.TagName
 	pkg.Sugar.Infof("get a release, owner: %s ,repo: %s ,version: %s", owner, repo, GR.Version)
 	for _, v := range myRelease.Assets {
@@ -166,10 +186,10 @@ func CreateDir(dirs ...string) (err error) {
 	return err
 }
 
-func (g *GithubRelease) Download() {
+func (g *GithubRelease) Download(client *GithubClient) {
 	for k, v := range g.AssetID {
 		filename := fmt.Sprintf("%s/%s", g.Path, g.AssetName[k])
-		DownloadReleaseAsset(g.Owner, g.Repo, v, filename)
+		client.DownloadReleaseAsset(g.Owner, g.Repo, v, filename)
 	}
 
 }
