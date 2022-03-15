@@ -56,6 +56,7 @@ githubRelease:
   - "fatedier/frp"
   - "v2rayA/v2rayA"
   - "XTLS/Xray-core"
+  - "Eugeny/tabby"
 # go: https://go.dev/dl/go1.17.7.darwin-amd64.tar.gz
 # node: https://registry.npmmirror.com/-/binary/node/v16.14.0/node-v16.14.0-linux-x64.tar.gz 
 # nginx: https://repo.huaweicloud.com/nginx/
