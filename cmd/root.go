@@ -47,7 +47,7 @@ func init() {
 	flag.IntVar(&config.LogMaxAge, "logMaxAge", config.LogMaxAge, "Time for the log file, Day")
 	flag.BoolVar(&config.LogCompress, "logCompress", config.LogCompress, "Compress rotated file")
 	flag.StringVarP(&config.ConfigPath, "cfgFile", "c", env("CONFIG", config.ConfigPath), "[EXPERIMENTAL] Path to config yaml file that can enable TLS or authentication.")
-	flag.StringVarP(&config.MirrorRoot, "mirrorRoot", "c", env("MirrorRoot", config.MirrorRoot), "[EXPERIMENTAL] github release 下载存储的路径.")
+	flag.StringVarP(&config.MirrorRoot, "mirrorRoot", "r", env("MirrorRoot", config.MirrorRoot), "[EXPERIMENTAL] github release 下载存储的路径.")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
 		fmt.Println("使用说明")
