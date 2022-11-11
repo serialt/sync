@@ -46,6 +46,7 @@ type MyConfig struct {
 	// Service       Service  `json:"service" yaml:"service"`
 	GithubToken   string   `yaml:"githubToken"`
 	Monitor       []string `yaml:"monitor"`
+	App           []string `yaml:"app"`
 	GithubRelease []string `yaml:"githubRelease"`
 	ExcludeTxt    []string `yaml:"excludeTxt"`
 }

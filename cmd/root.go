@@ -104,6 +104,12 @@ func Run() {
 		OtherDownload(myMonitorRepo[0], myMonitorRepo[1])
 
 	}
+	for _, v := range config.Config.App {
+		time.Sleep(time.Second * 3)
+		myMonitorRepo := strings.Split(v, "/")
+		AppDownload(myMonitorRepo[0], myMonitorRepo[1])
+
+	}
 	for _, v := range config.Config.Monitor {
 		time.Sleep(time.Second * 3)
 		myMonitorRepo := strings.Split(v, "/")
@@ -115,6 +121,11 @@ func Run() {
 }
 func MonitorDownload(owner, repo string) {
 	down := Githubclient.NewGitHubRelease(owner, repo, config.MirrorRoot+"/monitor")
+	down.Download(Githubclient)
+}
+
+func AppDownload(owner, repo string) {
+	down := Githubclient.NewGitHubRelease(owner, repo, config.MirrorRoot+"/app")
 	down.Download(Githubclient)
 }
 
