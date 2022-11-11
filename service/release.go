@@ -88,6 +88,7 @@ func (c *GithubClient) ListRelease(owner, repo string, lastNum int) (releaseList
 func (c *GithubClient) DownloadReleaseAsset(owner, repo string, assetID int, filepath string) {
 	// 如果目录里文件存在则不操作
 	if IsDirExists(filepath) {
+		pkg.Sugar.Infof("file exits: %v", filepath)
 		return
 	}
 	ctx := context.Background()
