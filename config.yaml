@@ -1,0 +1,42 @@
+githubToken: 12Gh+sib9ifhy7kz6xxxxxxxxxxxxxxxxxxxxxxxxxxWw==
+encrypt: true
+mirrorRoot: ./tmp
+monitor:
+ - "prometheus/prometheus"
+ - "prometheus/mysqld_exporter"
+ - "prometheus/alertmanager"
+#  - "prometheus/prometheus"
+#  - "prometheus/mysqld_exporter"
+#  - "prometheus/alertmanager"
+#  - "prometheus/haproxy_exporter"
+app:
+  - "istio/istio"
+githubRelease:
+  - "fatedier/frp"
+excludeTxt:
+
+  - "windows-arm64"
+  - "390"
+  - "386"
+  - "mips"
+  - "bsd"
+  - "dragonfly"
+  - "32"
+  - "ppc"
+  - "riscv"
+  - "s3960"
+  - "illumos"
+  - "v5"
+  - "v6"
+  - "v7"
+  - "deb"
+  - "rpm"
+  - "armhfp"
+  - "Source"
+  - "dgst"
+  - "linux-armhf"
+  - "blockmap"
+  - "unsigned"
+  - "dgst"
+  - "pacman"
+  - "sbom"

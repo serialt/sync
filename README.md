@@ -8,6 +8,7 @@
 ```shell
 [root@tc tmp]# cat ~/.sync.yaml 
 githubToken: ghp_Ohxxxxxxxxxxxxxxxxxxxxxx
+mirrorRoot: /tmp/mirror
 monitor:
   - "prometheus/prometheus"
   - "prometheus/mysqld_exporter"

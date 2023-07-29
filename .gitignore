@@ -26,3 +26,4 @@ cli*
 
 dist/
 sync*
+config.yaml
