@@ -11,9 +11,10 @@ import (
 	"strings"
 	"time"
 
+	"log/slog"
+
 	"github.com/google/go-github/v45/github"
 	"github.com/serialt/lancet/cryptor"
-	"golang.org/x/exp/slog"
 	"golang.org/x/oauth2"
 )
 

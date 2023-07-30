@@ -8,6 +8,7 @@
 ```shell
 [root@tc tmp]# cat ~/.sync.yaml 
 githubToken: ghp_Ohxxxxxxxxxxxxxxxxxxxxxx
+encrypt: false
 mirrorRoot: /tmp/mirror
 monitor:
   - "prometheus/prometheus"

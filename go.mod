@@ -6,7 +6,6 @@ require (
 	github.com/google/go-github/v45 v45.2.0
 	github.com/serialt/lancet v0.0.0-20230416125339-c1a402e622c0
 	github.com/serialt/sugar/v2 v2.0.4
-	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
 	golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0
 )
 

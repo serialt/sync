@@ -1,5 +1,5 @@
-githubToken: 12Gh+sib9ifhy7kz6xxxxxxxxxxxxxxxxxxxxxxxxxxWw==
-encrypt: true
+githubToken: ghp_3Pxxxxxxxxxxxxxxxxxxxxxxxx
+encrypt: false
 mirrorRoot: ./tmp
 monitor:
  - "prometheus/prometheus"
