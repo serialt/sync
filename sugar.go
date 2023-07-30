@@ -5,13 +5,12 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 	"time"
-
-	"log/slog"
 
 	"github.com/google/go-github/v45/github"
 	"github.com/serialt/lancet/cryptor"

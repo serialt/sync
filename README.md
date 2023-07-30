@@ -1,7 +1,7 @@
 ## Sync 下载同步Github release包
 
 ### 1、配置文件
-配置文件默认读取`~/.sync.yaml`,由于需要长时间访问github api，需要配置github access-token防止请求受限。
+配置文件默认读取`./config.yaml`,由于需要长时间访问github api，需要配置github access-token防止请求受限。
 
 
 ### 配置文件格式
