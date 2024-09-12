@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/google/go-github/v64/github"
+)
+
 var (
 	// 版本信息
 	appVersion bool // 控制是否显示版本
@@ -8,12 +12,6 @@ var (
 	GitCommit  = "xxxxxxxxxxx"
 	ConfigFile = "config.yaml"
 	config     *Config
-
-	AesKey       = "Serialt.tang@gmail.com_555555555"
-	AesData      string
-	MyRepo       []REPO
-	BreakWall    []string
-	Githubclient *GithubClient
 )
 
 type Log struct {
@@ -24,31 +22,22 @@ type Log struct {
 type Config struct {
 	Log           Log      `yaml:"log"`
 	MirrorRoot    string   `yaml:"mirrorRoot"`
-	GithubToken   string   `yaml:"githubToken"`
-	Encrypt       bool     `yaml:"encrypt"`
-	Monitor       []string `yaml:"monitor"`
-	Terraform     []string `yaml:"terraform"`
+	GithubToken   []string `yaml:"githubToken"`
+	RandomSleep   int64    `yaml:"randomSleep"`
 	GithubRelease []string `yaml:"githubRelease"`
 	ExcludeTxt    []string `yaml:"excludeTxt"`
-}
-
-/// 定义model
-
-type REPO struct {
-	Owner string
-	Repo  string
+	LastNum       int64    `yaml:"lastNum"`
 }
 
 type GithubClient struct {
-	Token string
+	Client     *github.Client
+	TokenIndex int64
 }
 
-type GithubRelease struct {
-	Owner              string
-	Repo               string
-	Version            string
-	AssetName          []string
-	AssetID            []int
-	BrowserDownloadUrl []string
-	Path               string
+type Release struct {
+	Owner     string
+	Repo      string
+	Version   string
+	AssetName string
+	AssetID   int64
 }

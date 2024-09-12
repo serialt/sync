@@ -9,25 +9,22 @@ import (
 	"github.com/serialt/sugar/v2"
 )
 
-func init() {
+func main() {
 	flag.BoolVar(&appVersion, "v", false, "Display build and version messages")
 	flag.StringVar(&ConfigFile, "c", "config.yaml", "Config file")
-	flag.StringVar(&AesData, "d", "", "加密的明文")
+
 	flag.Parse()
 
 	err := sugar.LoadConfig(ConfigFile, &config)
 	if err != nil {
+		fmt.Println("get config failed: ", err)
 		config = new(Config)
 	}
 	slog.SetDefault(sugar.New(
-		sugar.WithFile(config.Log.File),
 		sugar.WithLevel(config.Log.Level),
-	))
-	config.DecryptConfig()
+		sugar.WithFile(config.Log.File)),
+	)
 
-}
-
-func main() {
 	if appVersion {
 		slog.Info("app info",
 			"APPVersion", APPVersion,
@@ -36,9 +33,6 @@ func main() {
 		)
 		return
 	}
-	if len(AesData) > 0 {
-		fmt.Printf("Encrypted string: %v\n", Encrypt(AesData, AesKey))
-		return
-	}
+
 	Run()
 }

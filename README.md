@@ -7,10 +7,15 @@
 ### 配置文件格式
 ```shell
 [root@tc tmp]# cat ~/.sync.yaml 
-githubToken: ghp_Ohxxxxxxxxxxxxxxxxxxxxxx
-encrypt: false
-mirrorRoot: /tmp/mirror
-monitor:
+# 频繁访问可能会导致github限流,可以配置多个不同账号的token和随机sleep
+githubToken: 
+  - "ghp_3PpD0000000000000000000000000000000"
+  - "ghp_3PpD0000000000000000000000022222222"
+  - "ghp_3PpD0000000000000000000000055555555"
+randomSleep: 5
+lastNum: 3
+mirrorRoot: ./tmp
+githubRelease:
   - "prometheus/prometheus"
   - "prometheus/mysqld_exporter"
   - "prometheus/alertmanager"
@@ -52,8 +57,6 @@ monitor:
   - "pryorda/vmware_exporter"
   - "Lusitaniae/apache_exporter"
   - "joe-elliott/cert-exporter"   
-
-githubRelease:
   - "v2fly/v2ray-core"
   - "fatedier/frp"
   - "v2rayA/v2rayA"
