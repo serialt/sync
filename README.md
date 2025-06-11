@@ -22,7 +22,7 @@ githubRelease:
   - "prometheus/prometheus"
   - "prometheus/mysqld_exporter"
   - "prometheus/alertmanager"
-  - "prometheus/haproxy_exporter"
+  - "prometheus/haproxy_exporter:v1.11.1" # 当设置指定版本的时候，只下载对应的版本
   - "prometheus/node_exporter"
   - "prometheus/blackbox_exporter"
   - "prometheus/jmx_exporter"

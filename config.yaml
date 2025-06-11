@@ -8,9 +8,9 @@ lastNum: 3
 mirrorRoot: ./tmp
 githubRelease:
   # - "v2fly/v2ray-core"
-  # - "fatedier/frp"
+  # - "fatedier/frp:v1.11.1" # 当设置指定版本的时候，只下载对应的版本
   # - "v2rayA/v2rayA"
-  - "itchyny/gojq"
+  # - "itchyny/gojq"
   # # - "rancher/rke"
   # - "sharkdp/fd"
   # - "ventoy/Ventoy"

@@ -32,6 +32,16 @@ func Run() {
 		c.NextClient()
 		slog.Info("Get release data", "repo", v)
 		myMonitorRepo := strings.Split(v, "/")
+		myTags := strings.Split(myMonitorRepo[1], ":")
+		// 当指定版本的时候，只下载对应的版本
+		if len(myTags) == 2 {
+			releasesC, err := c.GetLastestReleaseByTag(myMonitorRepo[0], myTags[0], myTags[1])
+			if err != nil {
+				continue
+			}
+			releases = crab.SliceMerge(releases, releasesC)
+			continue
+		}
 		if config.LastNum <= 1 {
 			releasesC, err := c.GetLastestRelease(myMonitorRepo[0], myMonitorRepo[1])
 			if err != nil {
@@ -77,6 +87,35 @@ func (c *GithubClient) GetLastestRelease(owner, repo string) (items []*Release, 
 		slog.Info("cat not get the lastest release",
 			"owner", owner,
 			"repo", repo,
+			"error", err)
+		return
+	}
+
+	for _, v := range release.Assets {
+		// 如果名字中包含过滤字符
+		if ExcludeTxt(*v.Name) {
+			continue
+		}
+		items = append(items, &Release{
+			Owner:     owner,
+			Repo:      repo,
+			Version:   *release.TagName,
+			AssetName: *v.Name,
+			AssetID:   *v.ID,
+		})
+
+	}
+	return
+}
+
+// GetLastestRelease 获取最新的稳定release
+func (c *GithubClient) GetLastestReleaseByTag(owner, repo string, tag string) (items []*Release, err error) {
+	release, _, err := c.Client.Repositories.GetReleaseByTag(ctx, owner, repo, tag)
+	if err != nil {
+		slog.Info("cat not get the release by tag",
+			"owner", owner,
+			"repo", repo,
+			"tag", tag,
 			"error", err)
 		return
 	}
